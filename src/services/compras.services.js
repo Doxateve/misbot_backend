@@ -1,22 +1,43 @@
+// CAMBIAR DESPUES:
+// en vez de pasar itemName, mejor itemId para que sea mas facil
+
 import prisma from "../config/database.js";
 
-const comprarItem = async (username, itemName, cantidad) => {
+const comprarItem = async (username, items) => {
     try{
         const comprador = await prisma.usuario.findUnique({ where: { username: username }, select: { id: true } })
-        const producto = await prisma.producto.findUnique({ where: { nombre: itemName }, select: { id: true, precio: true } })
 
-        const total = producto.id * cantidad
+        if(!comprador) throw new Error("No existe ese usuario en la base de datos")
 
-        await prisma.compra.create({
-            data: {
+        // Busca en la DB los productos que tengan el nombre de cada item del array del body
+        const productos = await prisma.producto.findMany({
+            where: { nombre: { in: items.map(i => i.itemName) } }
+        });
+
+        const compras = items.map(item => {
+            // Busca en productos cuales si existen en la DB (si no hay resultado, itemName = undefined)
+            const producto = productos.find(p => p.nombre === item.itemName)
+            
+            // Si hay un item undefined, es porq no existe en la db
+            if(!producto) throw new Error(`No existe el producto ${item.itemName}`)
+
+            // Si pide mas cantidad del stock disponible
+            if(item.cantidad > producto.stock) throw new Error(`No hay tanto stock del producto ${item.itemName}`)
+            
+            // Si no, retorna los datos para insertar en COMPRA
+
+            return {
                 usuarioId: comprador.id,
                 productoId: producto.id,
-                cantidad,
-                total
+                cantidad: item.cantidad,
+                total: item.cantidad * producto.precio
             }
         })
 
-        console.log("creado")
+        // Crea los datos que devuelve compras
+        await prisma.compra.createMany({ data: compras })
+
+        return ("Comprado")
     } catch (e) {
         throw new Error(e)
     }

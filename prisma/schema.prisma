@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Usuario {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  username    String   @unique
+  rol         String   @default("usuario")
+  email       String   @unique
+  contraseña  String
+  createdAt   DateTime @default(now())
+  compras     Compra[]
+}
+
+enum TipoProducto {
+  ITEM
+  KIT
+  ROL
+}
+
+model Producto {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @unique
+  mcItem      String?
+  tipo        TipoProducto
+  descripcion String
+  precio      Float
+  stock       Int
+  imagenUrl   String?
+  compras     Compra[]
+}
+
+model Compra {
+  id         Int      @id @default(autoincrement())
+  usuarioId  Int
+  productoId Int
+  cantidad   Int
+  total      Float
+  createdAt  DateTime @default(now())
+  producto   Producto @relation(fields: [productoId], references: [id])
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+}

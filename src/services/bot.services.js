@@ -32,12 +32,12 @@ bot.on('error', (e) => {
 // Funcion para sincromizar el stock
 const sincronizarStock = async () => {
   // Busca los items en el inventario
-  const items = bot.inventory.items();
+  const botItems = bot.inventory.items();
   // Crea el mapa del stock
   const stockMap = {};
 
   // Hace lo siguiente con cada item del inventario
-  items.forEach(item => {
+  botItems.forEach(item => {
     // Saca el custom name o asignado por un Yunque 
     const nameRaw = item.nbt?.value?.display?.value?.Name?.value;
     // si no hay valor, pues null we
@@ -151,11 +151,13 @@ bot.once('spawn', async () => {
 })
 
 // username, itemName, y quantity las envia el controlador (la request)
-const entregarObjeto = (username, itemName, cantidad) => {
+const entregarObjeto = (username, items) => {
 
   // Para no tener q cambiar dos cosas despues
   const mensajeCompra = () => {
-    bot.chat(`/msg ${username} [!] Acabas de comprar un "${itemName}", iré hacia ti, no te muevas!`)
+    for(const { itemName, cantidad } of items) {
+      bot.chat(`/msg ${username} [!] Acabas de comprar un "${itemName}", iré hacia ti, no te muevas!`)
+    }
   };
 
   // Promise para controlar cuando se resuelve o se rechaza, para que la API no devuelva hasta que no termine
@@ -163,7 +165,7 @@ const entregarObjeto = (username, itemName, cantidad) => {
     // return reject(new Error) rechaza con un error
 
     // Si la request no tiene o usuario o itemname o cantidad
-    if(!username || !itemName || !cantidad) return reject(new Error('Request invalida'));
+    if(!username || !items) return reject(new Error('Request invalida'));
 
     // Si el username es el del bot
     if (username === bot.username) return reject (new Error('No me puedo vender a mi mismo'));
@@ -179,47 +181,49 @@ const entregarObjeto = (username, itemName, cantidad) => {
     // El objetivo es la entidad del usuario (Si es que existe)
     const objetivo = jugador.entity;
 
-    // Inicia el array de los items para meterle los del filter
-    const items = [];
-    // Inicia el stock, obvio, no we? :v
-    let stock = 0;
+    for(const { itemName, cantidad } of items) {
+      // Inicia el array de los items para meterle los del filter
+      const itemsInventario = [];
+      // Inicia el stock, obvio, no we? :v
+      let stock = 0;
+      
+      // Filtra los items del inventario
+      bot.inventory.items().filter(item => {
+        // Saca el custom name o asignado por un Yunque 
+        const nameRaw = item.nbt?.value?.display?.value?.Name?.value;
+        const parsedName = nameRaw ? JSON.parse(nameRaw).text : null;
 
-    // Filtra los items del inventario
-    bot.inventory.items().filter(item => {
-      // Saca el custom name o asignado por un Yunque 
-      const nameRaw = item.nbt?.value?.display?.value?.Name?.value;
-      const parsedName = nameRaw ? JSON.parse(nameRaw).text : null;
+        // Verifica si es una shulkerbox
+        const esShulker = item.name.includes('shulker_box');
 
-      // Verifica si es una shulkerbox
-      const esShulker = item.name.includes('shulker_box');
+        // Si existe, y parsedName es igual al nombre del objeto pasado, sigue:
+        if(parsedName && parsedName === itemName) {
+          // Mete cada item en el array
+          itemsInventario.push(item);
 
-      // Si existe, y parsedName es igual al nombre del objeto pasado, sigue:
-      if(parsedName && parsedName === itemName) {
-        // Mete cada item en el array
-        items.push(item);
-
-        // Le suma al stock
-        if(esShulker) {
-          stock += 1;
-        } else {
+          // Le suma al stock
+          if(esShulker) {
+            stock += 1;
+          } else {
+            stock += item.count;
+          }
+        } else if(item.displayName === itemName) { // Si el display name es igual al nombre del objeto
+          itemsInventario.push(item);
           stock += item.count;
         }
-      } else if(item.displayName === itemName) { // Si el display name es igual al nombre del objeto
-        items.push(item);
-        stock += item.count;
+      });
+
+       // Verifica si el array está vacio, quiere decir que no hay stock o no existe el item
+      if(stock === 0) {
+          bot.chat(`No hay stock de ${itemName}`)
+          return reject(new Error(`No hay stock de ${itemName}`))
       }
-    });
 
-    // Verifica si el array está vacio, quiere decir que no hay stock o no existe el item
-    if(stock === 0) {
-        bot.chat("No hay stock de ese Item")
-        return reject(new Error('No hay stock de ese Item'))
-    }
-
-    // Si el usuario pide mas cantidad del stock que hay
-    if(cantidad > stock) {
-        bot.chat("No hay tanto stock de ese Item")
-        return reject(new Error('No hay tanto stock de ese Item'));
+      // Si el usuario pide mas cantidad del stock que hay
+      if(cantidad > stock) {
+          bot.chat(`No hay tanto stock de ${itemName}`)
+          return reject(new Error(`No hay tanto stock de ${itemName}`));
+      }
     }
 
     // Solo calcula la distancia si hay objetivo
@@ -233,15 +237,26 @@ const entregarObjeto = (username, itemName, cantidad) => {
           // Mira al jugador
           await bot.lookAt(objetivoActual.position.offset(0, 1.6, 0));
 
-          await bot.equip(items[0], 'hand');
-          // Espera 500ms para que se vea que esta mirando al jugador y para q se equipe el objeto
-          await new Promise(resolve => setTimeout(resolve, 500));
-          // Tira el objeto al jugador
-          await bot.toss(items[0].type, null, cantidad);
+          for (const { itemName, cantidad } of items) {
+            const itemsInventario = bot.inventory.items().filter(item => {
+              // Saca el custom name o asignado por un Yunque 
+              const nameRaw = item.nbt?.value?.display?.value?.Name?.value;
+              // si no hay valor, pues null we
+              const parsedName = nameRaw ? JSON.parse(nameRaw).text : null;
 
-          await sincronizarStock();
+              if(parsedName) return parsedName === itemName;
+              return item.displayName === itemName
+            })
+            await bot.equip(itemsInventario[0], 'hand');
+            // Espera 500ms para que se vea que esta mirando al jugador y para q se equipe el objeto
+            await new Promise(resolve => setTimeout(resolve, 500));
+            // Tira el objeto al jugador
+            await bot.toss(itemsInventario[0].type, null, cantidad);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await sincronizarStock();
+            console.log(`[!] Objeto "${itemName}" entregado a "${username}", stock sincronizado`)
+          }
 
-          console.log(`[!] Objeto "${itemName}" entregado a "${username}", stock sincronizado`)
           // Se resuelve la promesa cuando alcanza el jugador
           resolve();
         } catch (e) {

@@ -3,6 +3,8 @@
 
 import prisma from "../config/database.js";
 
+import botServices from "./bot.services.js";
+
 const comprarItem = async (username, items) => {
     try{
         const comprador = await prisma.usuario.findUnique({ where: { username: username }, select: { id: true } })
@@ -13,6 +15,9 @@ const comprarItem = async (username, items) => {
         const productos = await prisma.producto.findMany({
             where: { nombre: { in: items.map(i => i.itemName) } }
         });
+
+        // Los manda al juego
+        await botServices.entregarObjeto(username, items)
 
         const compras = items.map(item => {
             // Busca en productos cuales si existen en la DB (si no hay resultado, itemName = undefined)
@@ -36,6 +41,7 @@ const comprarItem = async (username, items) => {
 
         // Crea los datos que devuelve compras
         await prisma.compra.createMany({ data: compras })
+        console.log(`[+] Compra añadida a "${username}"`)
 
         return ("Comprado")
     } catch (e) {

@@ -4,8 +4,8 @@ dotenv.config();
 export default {
     port: process.env.PORT || 3000,
     bot: {
-        host: 'misbottest.aternos.me',
-        port: '18525',
+        host: process.env.SERVER || '127.0.0.1',
+        port: process.env.SERVER_PORT || '25565',
         username: 'MISBot',
         auth: 'offline',
         version: '1.20.4'

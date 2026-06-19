@@ -150,37 +150,40 @@ bot.once('spawn', async () => {
   });
 })
 
-// username, itemName, y quantity las envia el controlador (la request)
+// username, y los items (array, adentro tienen itemName, y quantity) las envia el controlador (la request)
 const entregarObjeto = (username, items) => {
 
-  // Para no tener q cambiar dos cosas despues
+  // Para no tener q cambiar dos cosas despues, mensaje de compra
   const mensajeCompra = () => {
+    // Hace lo siguiente por cada uno de los items del array (items)
     for(const { itemName, cantidad } of items) {
       bot.chat(`/msg ${username} [!] Acabas de comprar un "${itemName}", iré hacia ti, no te muevas!`)
-    }
+    };
   };
 
   // Promise para controlar cuando se resuelve o se rechaza, para que la API no devuelva hasta que no termine
   return new Promise((resolve, reject) => {
-    // return reject(new Error) rechaza con un error
+    // return reject rechaza la promise, dando un error en el comprasService
 
-    // Si la request no tiene o usuario o itemname o cantidad
-    if(!username || !items) return reject(new Error('Request invalida'));
+    // Si la request no tiene o usuario o items
+    if(!username || !items) return reject('Request invalida');
 
     // Si el username es el del bot
-    if (username === bot.username) return reject (new Error('No me puedo vender a mi mismo'));
+    if (username === bot.username) return reject('No me puedo vender a mi mismo');
 
     // Si el bot está ocupado
-    if(botOcupado) return reject (new Error('Bot ocupado'));
+    if(botOcupado) return reject('Bot ocupado');
 
     // Si el jugador está en el server
     const jugador = bot.players[username];
 
-    if (!jugador) return reject (new Error('No te veo!'));
+    // Si el jugador no está en el servidor
+    if (!jugador) return reject('No te veo!');
 
-    // El objetivo es la entidad del usuario (Si es que existe)
+    // El objetivo es la entidad del jugador (Si es que existe)
     const objetivo = jugador.entity;
 
+    // Hace lo siguiente por cada uno de los items pasados
     for(const { itemName, cantidad } of items) {
       // Inicia el array de los items para meterle los del filter
       const itemsInventario = [];
@@ -215,20 +218,21 @@ const entregarObjeto = (username, items) => {
 
        // Verifica si el array está vacio, quiere decir que no hay stock o no existe el item
       if(stock === 0) {
-          bot.chat(`No hay stock de ${itemName}`)
-          return reject(new Error(`No hay stock de ${itemName}`))
+          bot.chat(`No hay stock de ${itemName}`);
+          return reject(`No hay stock de ${itemName}`);
       }
 
       // Si el usuario pide mas cantidad del stock que hay
       if(cantidad > stock) {
-          bot.chat(`No hay tanto stock de ${itemName}`)
-          return reject(new Error(`No hay tanto stock de ${itemName}`));
+          bot.chat(`No hay tanto stock de ${itemName}`);
+          return reject(`No hay tanto stock de ${itemName}`);
       }
-    }
+    };
 
     // Solo calcula la distancia si hay objetivo
     const distanciaAlJugador = objetivo ? bot.entity.position.distanceTo(objetivo.position) : 999
 
+    // Lo que hace al alcanzar al jugador
     const jugadorAlcanzado = async () => {
         try {
           const objetivoActual = bot.players[username]?.entity;
@@ -237,6 +241,7 @@ const entregarObjeto = (username, items) => {
           // Mira al jugador
           await bot.lookAt(objetivoActual.position.offset(0, 1.6, 0));
 
+          // Hace lo siguiente por cada uno de los items del array (items)
           for (const { itemName, cantidad } of items) {
             const itemsInventario = bot.inventory.items().filter(item => {
               // Saca el custom name o asignado por un Yunque 
@@ -246,13 +251,15 @@ const entregarObjeto = (username, items) => {
 
               if(parsedName) return parsedName === itemName;
               return item.displayName === itemName
-            })
+            });
+            // Se equipa el objeto a entregar
             await bot.equip(itemsInventario[0], 'hand');
             // Espera 500ms para que se vea que esta mirando al jugador y para q se equipe el objeto
             await new Promise(resolve => setTimeout(resolve, 500));
             // Tira el objeto al jugador
             await bot.toss(itemsInventario[0].type, null, cantidad);
             await new Promise(resolve => setTimeout(resolve, 500));
+            // Vuelve a sincronizar el stock
             await sincronizarStock();
             console.log(`[!] Objeto "${itemName}" entregado a "${username}", stock sincronizado`)
           }
@@ -286,7 +293,7 @@ const entregarObjeto = (username, items) => {
       setTimeout(async () => {
         // Ahora si como está cerca, toma la entity del jugador
         const objetivoActualizado = bot.players[username]?.entity;
-        if (!objetivoActualizado) return reject(new Error('No te puedo encontrar'));
+        if (!objetivoActualizado) return reject('No te puedo encontrar');
 
         // Lo mismo del otro codigo para estar al frente, solo actualice objetivoActualizado
         const xFrente = objetivoActualizado.position.x - Math.sin(objetivoActualizado.yaw) * 3;
@@ -330,8 +337,8 @@ const entregarObjeto = (username, items) => {
           bot.chat("/gamemode spectator");
           bot.removeAllListeners('goal_reached');
           console.error(`[!] El bot no pudo llegar donde "${username}"`);
-          bot.chat(`/msg ${username} [!] No pude llegar a tu ubicación, intenta un espacio abierto`)
-          return reject(new Error('El bot no pudo llegar a tu objetivo'))
+          bot.chat(`/msg ${username} [!] No pude llegar a tu ubicación, intenta un espacio abierto`);
+          return reject('El bot no pudo llegar a tu objetivo');
         };
       });
 

@@ -3,9 +3,9 @@ import productosServices from "../services/productos.services.js";
 const listarProductos = async (req, res) => {
     try {
         const productos = await productosServices.listarService();
-        res.json(productos);
+        return res.json(productos);
     } catch(e) {
-        res.status(500).json({ message: e.message })
+        return res.status(500).json({ message: e.message })
     }
 }
 
@@ -14,9 +14,9 @@ const buscarProducto = async (req, res) => {
 
     try {
         const producto = await productosServices.buscarService(productId)
-        res.json(producto)
+        return res.json(producto)
     } catch(e) {
-        res.status(500).json({ message: e.message })
+        return res.status(500).json({ message: e.message })
     }
 }
 

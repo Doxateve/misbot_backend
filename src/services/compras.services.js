@@ -16,7 +16,7 @@ const comprarItem = async (username, items) => {
             where: { nombre: { in: items.map(i => i.itemName) } }
         });
 
-        // Los manda al juego
+        // El botServices.entregarObjeto los mnda al juego
         await botServices.entregarObjeto(username, items)
 
         const compras = items.map(item => {
@@ -42,8 +42,6 @@ const comprarItem = async (username, items) => {
         // Crea los datos que devuelve compras
         await prisma.compra.createMany({ data: compras })
         console.log(`[+] Compra añadida a "${username}"`)
-
-        return ("Comprado")
     } catch (e) {
         throw new Error(e)
     }

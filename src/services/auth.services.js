@@ -9,13 +9,15 @@ const registerService = async (nombre, username, email, contraseña) => {
     }
 
     try {
+        // Lo crea en la db
         await prisma.usuario.create({ data: {
             nombre,
             username,
             email,
             contraseña
-        } })
-        console.log(`[+] Usuario creado: ${username} (${email})`)
+        } });
+
+        console.log(`[+] Usuario creado: ${username} (${email})`);
     } catch(e) {
         if(e.code === 'P2002') {
             const mensaje = e.meta.driverAdapterError.cause.originalMessage;

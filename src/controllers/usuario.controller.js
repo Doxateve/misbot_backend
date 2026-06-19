@@ -10,9 +10,9 @@ const comprasController = async (req, res) => {
 
     try {
         const compras = await usuarioServices.comprasService(userId);
-        res.json(compras)
+        return res.json(compras)
     } catch (e) {
-        res.status(500).json({ message: e.message })
+        return res.status(500).json({ message: e.message })
     }
 };
 

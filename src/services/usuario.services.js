@@ -13,11 +13,11 @@ const comprasService = async (userId) => {
                 }
             }
         }
-    })
+    });
 
-    if(!compras) throw new Error("No tienes compras")
+    if(!compras) throw new Error("No tienes compras");
 
-    return compras
+    return compras;
 }
 
-export default { comprasService }
+export default { comprasService };

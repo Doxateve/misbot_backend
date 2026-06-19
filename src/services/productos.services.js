@@ -5,11 +5,11 @@ const listarService = async () => {
 }
 
 const buscarService = async (productId) => {
-    const producto = await prisma.producto.findUnique({ where: { id: productId } })
+    const producto = await prisma.producto.findUnique({ where: { id: productId } });
 
-    if(!producto) throw new Error("No existe ese producto")
+    if(!producto) throw new Error("No existe ese producto");
 
-    return producto
+    return producto;
 }
 
 export default { listarService, buscarService };

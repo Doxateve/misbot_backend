@@ -5,19 +5,19 @@ const listarProductos = async (req, res) => {
         const productos = await productosServices.listarService();
         return res.json(productos);
     } catch(e) {
-        return res.status(500).json({ message: e.message })
-    }
-}
+        return res.status(500).json({ message: e.message });
+    };
+};
 
 const buscarProducto = async (req, res) => {
-    const productId = parseInt(req.params.productId)
+    const productId = parseInt(req.params.productId);
 
     try {
-        const producto = await productosServices.buscarService(productId)
-        return res.json(producto)
+        const producto = await productosServices.buscarService(productId);
+        return res.json(producto);
     } catch(e) {
-        return res.status(500).json({ message: e.message })
-    }
-}
+        return res.status(500).json({ message: e.message });
+    };
+};
 
 export default { listarProductos, buscarProducto };

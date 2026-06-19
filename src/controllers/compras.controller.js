@@ -22,7 +22,7 @@ const comprarObjeto = async (req, res) => {
     return res.status(200).json({ message: "Compra realizada satisfactoriamente." });
   } catch (error) {
     return res.status(400).json({ message: error.message });
-  }
+  };
 };
 
 export default { comprarObjeto };

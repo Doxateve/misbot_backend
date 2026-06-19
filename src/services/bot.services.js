@@ -11,13 +11,13 @@ import { error } from 'node:console';
 const { pathfinder, Movements, goals: { GoalBlock } } = mineflayerPathfinder;
 
 // Inicia el bot con la config de ./config/index.js
-const bot = mineflayer.createBot(config.bot)
+const bot = mineflayer.createBot(config.bot);
 
 // Carga los plugins
 bot.loadPlugin(pathfinder);
 
 // Define los movimientos base
-const defaultMove = new Movements(bot)
+const defaultMove = new Movements(bot);
 
 // Inicia el tiempo de espera en null
 let timeoutActualizacion = null;
@@ -26,8 +26,8 @@ let timeoutActualizacion = null;
 let botOcupado = false; // Para que no intente entregar una cosa mientras está entregando otra
 
 bot.on('error', (e) => {
-  console.log('[!] Error a la hora de conectar el bot.')
-})
+  return console.log('[!] Error a la hora de conectar el bot.');
+});
 
 // Funcion para sincromizar el stock
 const sincronizarStock = async () => {
@@ -53,7 +53,7 @@ const sincronizarStock = async () => {
         if (!stockMap[parsedName]) {
           // Si esShulker, su tipo es "KIT", si no, "ITEM"
           stockMap[parsedName] = { stock: 0, mcItem: item.name, tipo: esShulker ? 'KIT' : 'ITEM' };
-        }
+        };
 
         // Si es shulker cuenta como 1 kit, si no, cuenta la cantidad del stack
         stockMap[parsedName].stock += esShulker ? 1 : item.count;
@@ -104,19 +104,20 @@ const sincronizarStock = async () => {
           
         } catch (e) {
           throw new Error(`[-] Error al actualizar/crear ${nombre}: ${e}`);
-        }
+        };
       })
     );
     
   } catch (error) {
     throw new Error(error);
-  }
+  };
 };
 
 // Lo que el bot hace al spawnear
 bot.once('spawn', async () => {
-  console.log(`[*] Bot "${config.bot.username}" conectado al servidor ${config.bot.host}`)
-  // Hace que el bot siempre corra y pueda hacer parkour
+  console.log(`[*] Bot "${config.bot.username}" conectado al servidor ${config.bot.host}`);
+
+  // Hace que el bot siempre corra y pueda hacer "parkour"
   defaultMove.sprint = true; 
   defaultMove.allowParkour = true;
 
@@ -128,7 +129,7 @@ bot.once('spawn', async () => {
     await sincronizarStock();
     console.log("[+] Stock sincronizado con la base de Datos");
   } catch(error) {
-    console.error("[!] Error al sincronizar stock" + error)
+    console.error("[!] Error al sincronizar stock" + error);
   }
 
   // Hace lo siguiente cuando el inventario cambia de alguna forma
@@ -157,7 +158,7 @@ const entregarObjeto = (username, items) => {
   const mensajeCompra = () => {
     // Hace lo siguiente por cada uno de los items del array (items)
     for(const { itemName, cantidad } of items) {
-      bot.chat(`/msg ${username} [!] Acabas de comprar un "${itemName}", iré hacia ti, no te muevas!`)
+      bot.chat(`/msg ${username} [!] Acabas de comprar un "${itemName}", iré hacia ti, no te muevas!`);
     };
   };
 
@@ -209,28 +210,28 @@ const entregarObjeto = (username, items) => {
             stock += 1;
           } else {
             stock += item.count;
-          }
+          };
         } else if(item.displayName === itemName) { // Si el display name es igual al nombre del objeto
           itemsInventario.push(item);
           stock += item.count;
-        }
+        };
       });
 
        // Verifica si el array está vacio, quiere decir que no hay stock o no existe el item
       if(stock === 0) {
           bot.chat(`No hay stock de ${itemName}`);
           return reject(`No hay stock de ${itemName}`);
-      }
+      };
 
       // Si el usuario pide mas cantidad del stock que hay
       if(cantidad > stock) {
           bot.chat(`No hay tanto stock de ${itemName}`);
           return reject(`No hay tanto stock de ${itemName}`);
-      }
+      };
     };
 
     // Solo calcula la distancia si hay objetivo
-    const distanciaAlJugador = objetivo ? bot.entity.position.distanceTo(objetivo.position) : 999
+    const distanciaAlJugador = objetivo ? bot.entity.position.distanceTo(objetivo.position) : 999;
 
     // Lo que hace al alcanzar al jugador
     const jugadorAlcanzado = async () => {
@@ -249,8 +250,10 @@ const entregarObjeto = (username, items) => {
               // si no hay valor, pues null we
               const parsedName = nameRaw ? JSON.parse(nameRaw).text : null;
 
+              // si existe parsedName
               if(parsedName) return parsedName === itemName;
-              return item.displayName === itemName
+
+              return item.displayName === itemName;
             });
             // Se equipa el objeto a entregar
             await bot.equip(itemsInventario[0], 'hand');
@@ -262,7 +265,7 @@ const entregarObjeto = (username, items) => {
             // Vuelve a sincronizar el stock
             await sincronizarStock();
             console.log(`[!] Objeto "${itemName}" entregado a "${username}", stock sincronizado`)
-          }
+          };
 
           // Se resuelve la promesa cuando alcanza el jugador
           resolve();
@@ -275,8 +278,8 @@ const entregarObjeto = (username, items) => {
         } finally {
           botOcupado = false;
           bot.chat("/gamemode spectator"); 
-          }
-      }
+        };
+      };
 
     // Como ya tira error si no existe "jugador", si no hay objetivo es pq el jugador está muy lejos
     // Si el jugador esta muy lejos, mejor se hace TP
@@ -284,9 +287,11 @@ const entregarObjeto = (username, items) => {
 
       botOcupado = true;
 
-      mensajeCompra()
+      // Envia el mensaje de compra
+      mensajeCompra();
 
-      bot.chat("/gamemode spectator")
+      // Se pone en espectador antes de hacerse tp
+      bot.chat("/gamemode spectator");
       bot.chat(`/tp ${bot.username} ${username}`);
 
       // Espera 2000ms (2s) despues del primer tp
@@ -307,8 +312,9 @@ const entregarObjeto = (username, items) => {
         // Espera 100ms para ejecutar jugadorAlcanzado
         await new Promise(resolve => setTimeout(resolve, 100));
         await jugadorAlcanzado();
-      }, 2000) // 2s despues del tp
-    } else { // Si está cerquita <150 bloques
+      }, 2000); // 2s despues del tp
+    // Si está cerquita <150 bloques
+    } else {
       // Formula para que calcule donde es el frente del jugador (nose me la dio chepete)
       const distancia = 3; 
       const xFrente = objetivo.position.x - Math.sin(objetivo.yaw) * distancia;
@@ -316,14 +322,15 @@ const entregarObjeto = (username, items) => {
       const yFrente = objetivo.position.y;
       
       botOcupado = true; 
-      
+
+      // Envia el mensaje de compra
       mensajeCompra();
 
       // Selecciona el objetivo como el resultado de la formula de arriba
       bot.pathfinder.setGoal(new GoalBlock(xFrente, yFrente, zFrente));
 
       // Se pone en creativo para que el usuario lo vea caminando hacia el
-      bot.chat("/gamemode creative")
+      bot.chat("/gamemode creative");
 
       // Para que no se acumulen los listeners de los eventos
       bot.removeAllListeners('path_update');
@@ -344,8 +351,8 @@ const entregarObjeto = (username, items) => {
 
       // Ejecuta la funcion jugadorAlcanzado al alcanzar su objetivo
       bot.once('goal_reached', jugadorAlcanzado);
-    }
-  })
+    };
+  });
 };
 
 export default { bot, entregarObjeto };

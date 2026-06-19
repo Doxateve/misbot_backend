@@ -1,11 +1,11 @@
 import prisma from '../config/database.js';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
 import config from '../config/index.js';
 
 const registerService = async (nombre, username, email, contraseña) => {
     if(!nombre || !username || !email || !contraseña){
-        throw new Error('Hacen falta datos')
+        throw new Error('Hacen falta datos');
     }
 
     try {
@@ -26,14 +26,14 @@ const registerService = async (nombre, username, email, contraseña) => {
             if (mensaje.includes('email')) throw new Error('El email ya está en uso');
 
             throw new Error('Dato duplicado');
-        }
-    }
-}
+        };
+    };
+};
 
 const loginService = async ({ email, contraseña }, res) => {
     if(!email || !contraseña){
-        throw new Error('Hacen falta datos')
-    }
+        throw new Error('Hacen falta datos');
+    };
 
     const usuario = await prisma.usuario.findUnique({ where: { email } });
 
@@ -47,7 +47,7 @@ const loginService = async ({ email, contraseña }, res) => {
         { expiresIn: config.jwt.expiresIn }
     );
 
-    return { usuario, token }
-}
+    return { usuario, token };
+};
 
 export default { registerService, loginService };

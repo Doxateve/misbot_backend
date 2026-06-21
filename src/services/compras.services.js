@@ -9,8 +9,6 @@ const comprarItem = async (username, items) => {
     try{
         const comprador = await prisma.usuario.findUnique({ where: { username: username }, select: { id: true } });
 
-        if(!comprador) throw new Error("No existe ese usuario en la base de datos");
-
         // Busca en la DB los productos que tengan el nombre de cada item del array del body
         const productos = await prisma.producto.findMany({
             where: { nombre: { in: items.map(i => i.itemName) } }

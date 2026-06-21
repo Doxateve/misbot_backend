@@ -212,7 +212,7 @@ importers:
         version: 7.8.0
       '@prisma/client':
         specifier: ^7.8.0
-        version: 7.8.0(prisma@7.8.0(@types/react@19.2.17)(better-sqlite3@12.10.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
+        version: 7.8.0(prisma@7.8.0(@types/react@19.2.17)(better-sqlite3@12.11.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
       cookie-parser:
         specifier: ^1.4.7
         version: 1.4.7
@@ -221,13 +221,13 @@ importers:
         version: 17.4.2
       express:
         specifier: ^5.2.1
-        version: 5.2.1(supports-color@5.5.0)
+        version: 5.2.1
       jsonwebtoken:
         specifier: ^9.0.3
         version: 9.0.3
       minecraft-data:
-        specifier: ^3.110.2
-        version: 3.110.2
+        specifier: ^3.111.0
+        version: 3.111.0
       mineflayer:
         specifier: ^4.37.1
         version: 4.37.1
@@ -249,7 +249,7 @@ importers:
         version: 3.1.14
       prisma:
         specifier: ^7.8.0
-        version: 7.8.0(@types/react@19.2.17)(better-sqlite3@12.10.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 7.8.0(@types/react@19.2.17)(better-sqlite3@12.11.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
 
 packages:
 
@@ -481,8 +481,8 @@ packages:
   better-result@2.9.2:
     resolution: {integrity: sha512-WIFoBPCdnTOdk9inkE1ZRvCZ4P0CpSkAiLlchC65N7n9DcjZ3NhqkBOlafzpOVnO8ixyi37kicmSJ3ENhPZl7Q==}
 
-  better-sqlite3@12.10.1:
-    resolution: {integrity: sha512-HfFtzCqnSfwB3+HroF6PSKzyh+7RfNMGPCzHFUZXRlvrPCb4P3cvxKZNN43Sr7IrkofqQZM+gIvffGpA8VvqgA==}
+  better-sqlite3@12.11.1:
+    resolution: {integrity: sha512-dq9AtApgg5PGFtBzPFSBl3HZQjHok5gaQCM6zh2Yk0aSmDCs1CbnVI8/HgASQkNKsWFpseIO9beg5xxpYhbIfA==}
     engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x || 26.x}
 
   binary-extensions@2.3.0:
@@ -807,8 +807,8 @@ packages:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
 
-  hono@4.12.25:
-    resolution: {integrity: sha512-2NFaIyNVgJmBs/ecmtGzlmluTFs5cHEWGTdu0t1HBwYzoGXOL5nUQBRMXsXWla5i4KkG//QMzVP88m1+I3fdAQ==}
+  hono@4.12.26:
+    resolution: {integrity: sha512-uyZtpnYxM9CmQ7QsQknM4zN8EftNqhON1qYeIKM0Se67CCEe2c44xyGURwB0axX2fBDu1dqHrHAc1hmNT8ITkw==}
     engines: {node: '>=16.9.0'}
 
   http-errors@2.0.1:
@@ -944,8 +944,8 @@ packages:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
 
-  minecraft-data@3.110.2:
-    resolution: {integrity: sha512-u0aCCSpQWVreGnZGU/Lu0jmZmc0Y37M0Fvw6eQVQY0BdS/BGRDDU+ug6/qP3QDuZRJCSzi8wNW8ODnOhwpnkpA==}
+  minecraft-data@3.111.0:
+    resolution: {integrity: sha512-0kKHqNZL/D1IbH7tJXBJ3z7YSn1/ylnWWR7X2zFwtEV+yr23nimItpGjP3o8UaLYrC+OV1gKLFQoew03XvJyoA==}
 
   minecraft-folder-path@1.2.0:
     resolution: {integrity: sha512-qaUSbKWoOsH9brn0JQuBhxNAzTDMwrOXorwuRxdJKKKDYvZhtml+6GVCUrY5HRiEsieBEjCUnhVpDuQiKsiFaw==}
@@ -1461,24 +1461,24 @@ snapshots:
 
   '@electric-sql/pglite@0.4.1': {}
 
-  '@hono/node-server@1.19.11(hono@4.12.25)':
+  '@hono/node-server@1.19.11(hono@4.12.26)':
     dependencies:
-      hono: 4.12.25
+      hono: 4.12.26
 
   '@kurkle/color@0.3.4': {}
 
   '@prisma/adapter-better-sqlite3@7.8.0':
     dependencies:
       '@prisma/driver-adapter-utils': 7.8.0
-      better-sqlite3: 12.10.1
+      better-sqlite3: 12.11.1
 
   '@prisma/client-runtime-utils@7.8.0': {}
 
-  '@prisma/client@7.8.0(prisma@7.8.0(@types/react@19.2.17)(better-sqlite3@12.10.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))':
+  '@prisma/client@7.8.0(prisma@7.8.0(@types/react@19.2.17)(better-sqlite3@12.11.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))':
     dependencies:
       '@prisma/client-runtime-utils': 7.8.0
     optionalDependencies:
-      prisma: 7.8.0(@types/react@19.2.17)(better-sqlite3@12.10.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      prisma: 7.8.0(@types/react@19.2.17)(better-sqlite3@12.11.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
 
   '@prisma/config@7.8.0':
     dependencies:
@@ -1498,13 +1498,13 @@ snapshots:
       '@electric-sql/pglite': 0.4.1
       '@electric-sql/pglite-socket': 0.1.1(@electric-sql/pglite@0.4.1)
       '@electric-sql/pglite-tools': 0.3.1(@electric-sql/pglite@0.4.1)
-      '@hono/node-server': 1.19.11(hono@4.12.25)
+      '@hono/node-server': 1.19.11(hono@4.12.26)
       '@prisma/get-platform': 7.2.0
       '@prisma/query-plan-executor': 7.2.0
       '@prisma/streams-local': 0.1.2
       foreground-child: 3.3.1
       get-port-please: 3.2.0
-      hono: 4.12.25
+      hono: 4.12.26
       http-status-codes: 2.3.0
       pathe: 2.0.3
       proper-lockfile: 4.1.2
@@ -1679,7 +1679,7 @@ snapshots:
 
   better-result@2.9.2: {}
 
-  better-sqlite3@12.10.1:
+  better-sqlite3@12.11.1:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
@@ -1696,7 +1696,7 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
 
-  body-parser@2.3.0(supports-color@5.5.0):
+  body-parser@2.3.0:
     dependencies:
       bytes: 3.1.2
       content-type: 2.0.0
@@ -1885,10 +1885,10 @@ snapshots:
 
   expand-template@2.0.3: {}
 
-  express@5.2.1(supports-color@5.5.0):
+  express@5.2.1:
     dependencies:
       accepts: 2.0.0
-      body-parser: 2.3.0(supports-color@5.5.0)
+      body-parser: 2.3.0
       content-disposition: 1.1.0
       content-type: 1.0.5
       cookie: 0.7.2
@@ -1898,7 +1898,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 2.1.1(supports-color@5.5.0)
+      finalhandler: 2.1.1
       fresh: 2.0.0
       http-errors: 2.0.1
       merge-descriptors: 2.0.0
@@ -1909,8 +1909,8 @@ snapshots:
       proxy-addr: 2.0.7
       qs: 6.15.2
       range-parser: 1.2.1
-      router: 2.2.0(supports-color@5.5.0)
-      send: 1.2.1(supports-color@5.5.0)
+      router: 2.2.0
+      send: 1.2.1
       serve-static: 2.2.1
       statuses: 2.0.2
       type-is: 2.1.0
@@ -1936,7 +1936,7 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
-  finalhandler@2.1.1(supports-color@5.5.0):
+  finalhandler@2.1.1:
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       encodeurl: 2.0.0
@@ -2011,7 +2011,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hono@4.12.25: {}
+  hono@4.12.26: {}
 
   http-errors@2.0.1:
     dependencies:
@@ -2123,7 +2123,7 @@ snapshots:
 
   mimic-response@3.1.0: {}
 
-  minecraft-data@3.110.2: {}
+  minecraft-data@3.111.0: {}
 
   minecraft-folder-path@1.2.0: {}
 
@@ -2136,7 +2136,7 @@ snapshots:
       debug: 4.4.3(supports-color@5.5.0)
       endian-toggle: 0.0.0
       lodash.merge: 4.6.2
-      minecraft-data: 3.110.2
+      minecraft-data: 3.111.0
       minecraft-folder-path: 1.2.0
       node-fetch: 2.7.0
       node-rsa: 0.4.2
@@ -2154,7 +2154,7 @@ snapshots:
 
   mineflayer-pathfinder@2.4.5(prismarine-registry@1.12.0):
     dependencies:
-      minecraft-data: 3.110.2
+      minecraft-data: 3.111.0
       prismarine-block: 1.23.0(prismarine-registry@1.12.0)
       prismarine-entity: 2.6.0
       prismarine-item: 1.18.0
@@ -2167,7 +2167,7 @@ snapshots:
 
   mineflayer@4.37.1:
     dependencies:
-      minecraft-data: 3.110.2
+      minecraft-data: 3.111.0
       minecraft-protocol: 1.66.2
       mojangson: 2.0.4
       prismarine-biome: 1.4.0(prismarine-registry@1.12.0)
@@ -2307,7 +2307,7 @@ snapshots:
       tar-fs: 2.1.4
       tunnel-agent: 0.6.0
 
-  prisma@7.8.0(@types/react@19.2.17)(better-sqlite3@12.10.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  prisma@7.8.0(@types/react@19.2.17)(better-sqlite3@12.11.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       '@prisma/config': 7.8.0
       '@prisma/dev': 0.24.3
@@ -2316,7 +2316,7 @@ snapshots:
       mysql2: 3.15.3
       postgres: 3.4.7
     optionalDependencies:
-      better-sqlite3: 12.10.1
+      better-sqlite3: 12.11.1
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
@@ -2340,7 +2340,7 @@ snapshots:
 
   prismarine-block@1.23.0(prismarine-registry@1.12.0):
     dependencies:
-      minecraft-data: 3.110.2
+      minecraft-data: 3.111.0
       prismarine-biome: 1.4.0(prismarine-registry@1.12.0)
       prismarine-chat: 1.13.0
       prismarine-item: 1.18.0
@@ -2392,7 +2392,7 @@ snapshots:
 
   prismarine-physics@1.11.0:
     dependencies:
-      minecraft-data: 3.110.2
+      minecraft-data: 3.111.0
       prismarine-nbt: 2.8.0
       vec3: 0.1.10
 
@@ -2410,7 +2410,7 @@ snapshots:
 
   prismarine-registry@1.12.0:
     dependencies:
-      minecraft-data: 3.110.2
+      minecraft-data: 3.111.0
       prismarine-block: 1.23.0(prismarine-registry@1.12.0)
       prismarine-nbt: 2.8.0
     transitivePeerDependencies:
@@ -2527,7 +2527,7 @@ snapshots:
 
   retry@0.12.0: {}
 
-  router@2.2.0(supports-color@5.5.0):
+  router@2.2.0:
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       depd: 2.0.0
@@ -2550,7 +2550,7 @@ snapshots:
 
   semver@7.8.4: {}
 
-  send@1.2.1(supports-color@5.5.0):
+  send@1.2.1:
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       encodeurl: 2.0.0
@@ -2573,7 +2573,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 1.2.1(supports-color@5.5.0)
+      send: 1.2.1
     transitivePeerDependencies:
       - supports-color
 

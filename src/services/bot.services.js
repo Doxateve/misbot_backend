@@ -8,6 +8,8 @@ import mineflayerPathfinder from 'mineflayer-pathfinder';
 import nbt from 'prismarine-nbt';
 import { error } from 'node:console';
 
+import mciconsServices from './mcicons.services.js';
+
 const { pathfinder, Movements, goals: { GoalBlock } } = mineflayerPathfinder;
 
 // Inicia el bot con la config de ./config/index.js
@@ -87,10 +89,12 @@ const sincronizarStock = async () => {
     await Promise.all(
       Object.entries(stockMap).map(async ([nombre, { stock, mcItem, tipo }]) => {
         try {
+          const imagenUrl = mciconsServices.obtenerIconoPorMcItem(mcItem);
+          
           // Actualiza la base de datos si hay datos existentes, si no, los agrega
           await prisma.producto.upsert({
             where: { nombre },
-            update: { stock },
+            update: { stock, imagenUrl },
             // Si no existe, lo crea asi:
             create: {
               nombre,
@@ -98,6 +102,7 @@ const sincronizarStock = async () => {
               precio: 0,
               descripcion: '',
               mcItem,
+              imagenUrl,
               tipo
             }
           });
@@ -179,7 +184,7 @@ const entregarObjeto = (username, items) => {
     const jugador = bot.players[username];
 
     // Si el jugador no está en el servidor
-    if (!jugador) return reject('No te veo!');
+    if (!jugador) return reject('El bot no ha logrado encontrarte.');
 
     // El objetivo es la entidad del jugador (Si es que existe)
     const objetivo = jugador.entity;

@@ -1,6 +1,7 @@
 import comprasServices from '../services/compras.services.js';
 
 const comprarObjeto = async (req, res) => {
+  const userId = req.user.id
   const username = req.body.username;
   const items = req.body.items;
 
@@ -16,7 +17,7 @@ const comprarObjeto = async (req, res) => {
 
   try {
     // Intenta comprar
-    await comprasServices.comprarItem(username, items);
+    await comprasServices.comprarItem(userId, username, items);
 
     // 200 OK
     return res.status(200).json({ message: "Compra realizada satisfactoriamente." });

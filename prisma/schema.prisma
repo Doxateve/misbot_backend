@@ -9,11 +9,13 @@ datasource db {
 
 model Usuario {
   id          Int      @id @default(autoincrement())
+  imagenUrl   String?
   nombre      String
   username    String   @unique
+  descripcion String?
   rol         String   @default("usuario")
   email       String   @unique
-  contraseña  String
+  contraseña String
   createdAt   DateTime @default(now())
   compras     Compra[]
 }
@@ -25,8 +27,8 @@ enum TipoProducto {
 }
 
 model Producto {
-  id          Int      @id @default(autoincrement())
-  nombre      String   @unique
+  id          Int          @id @default(autoincrement())
+  nombre      String       @unique
   mcItem      String?
   tipo        TipoProducto
   descripcion String
@@ -37,12 +39,13 @@ model Producto {
 }
 
 model Compra {
-  id         Int      @id @default(autoincrement())
-  usuarioId  Int
-  productoId Int
-  cantidad   Int
-  total      Float
-  createdAt  DateTime @default(now())
-  producto   Producto @relation(fields: [productoId], references: [id])
-  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+  id                Int      @id @default(autoincrement())
+  usuarioId         Int
+  usernameComprador String
+  productoId        Int
+  cantidad          Int
+  total             Float
+  createdAt         DateTime @default(now())
+  producto          Producto @relation(fields: [productoId], references: [id])
+  usuario           Usuario  @relation(fields: [usuarioId], references: [id])
 }

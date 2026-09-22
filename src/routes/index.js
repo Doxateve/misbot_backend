@@ -4,6 +4,7 @@ import comprasRouter from './compras.routes.js';
 import usuarioRouter from './usuario.routes.js';
 import authRouter from './auth.routes.js';
 import productosRouter from './productos.routes.js';
+import mcIemsRouter from './mcItems.routes.js'
 
 import authMiddleware from '../middlewares/auth.middleware.js';
 
@@ -13,5 +14,6 @@ router.use('/compras', authMiddleware, comprasRouter);
 router.use('/usuario', authMiddleware, usuarioRouter);
 router.use('/auth', authRouter);
 router.use('/productos', productosRouter);
+router.use('/mcItems', mcIemsRouter)
 
 export default router;

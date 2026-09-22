@@ -14,17 +14,55 @@ const perfilService = async (userId) => {
   return usuario;
 };
 
+const editarPerfilService = async (
+  userId,
+  { imagenUrl, nombre, descripcion },
+) => {
+  try {
+    await prisma.usuario.update({
+      where: { id: userId },
+      data: {
+        imagenUrl: imagenUrl,
+        nombre: nombre,
+        descripcion: descripcion,
+      },
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const editarCuentaService = async (
+  userId,
+  { nombre, username, email, contraseña },
+) => {
+  try {
+    await prisma.usuario.update({
+      where: { id: userId },
+      data: {
+        nombre: nombre,
+        username: username,
+        email: email,
+        contraseña: contraseña,
+      },
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const comprasService = async (userId) => {
   const compras = await prisma.compra.findMany({
     where: { usuarioId: userId },
     include: {
       producto: {
         select: {
+          id: true,
           nombre: true,
           precio: true,
           tipo: true,
           imagenUrl: true,
-        },
+        }
       },
     },
   });
@@ -34,4 +72,4 @@ const comprasService = async (userId) => {
   return compras;
 };
 
-export default { perfilService, comprasService };
+export default { perfilService, editarPerfilService, editarCuentaService, comprasService };

@@ -8,7 +8,7 @@ import mineflayerPathfinder from "mineflayer-pathfinder";
 import nbt from "prismarine-nbt";
 import { error } from "node:console";
 
-import mciconsServices from "./mcicons.services.js";
+import mciconsServices from "./mcItems.services.js";
 
 const {
   pathfinder,
@@ -18,6 +18,7 @@ const {
 
 // Inicia el bot con la config de ./config/index.js
 const bot = mineflayer.createBot(config.bot);
+const botUsername = config.bot.username;
 
 // Carga los plugins
 bot.loadPlugin(pathfinder);
@@ -385,4 +386,18 @@ const entregarObjeto = (username, items) => {
   });
 };
 
-export default { bot, entregarObjeto };
+const añadirObjeto = ({ nombre, mcItem, stock }) => {
+  try {
+    if (!mcItem || !stock) throw new Error("Faltan datos");
+
+    bot.chat(
+      `/give ${botUsername} minecraft:${mcItem}${nombre ? `{display:{Name:'{"text":"${nombre}"}'}}` : ""} ${stock}`,
+    );
+
+    return "Item entregado."
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export default { bot, entregarObjeto, añadirObjeto };
